@@ -1,4 +1,4 @@
-# Exam Pal - AI Study Assistant
+# Circuit - AI Study Assistant
 
 Exam Pal is an AI-powered study assistant that helps students prepare for exams by generating personalized study plans and providing a GenZ-styled conversational interface for Q&A about study materials.
 

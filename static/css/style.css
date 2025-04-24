@@ -415,6 +415,27 @@ textarea:focus {
   position: relative;
 }
 
+.message-content {
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.message-content strong {
+  font-weight: 700;
+}
+
+.message-content em {
+  font-style: italic;
+}
+
+/* Style for code blocks if needed */
+.message-content code {
+  font-family: monospace;
+  background-color: rgba(0,0,0,0.05);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+
 .message-user {
   align-self: flex-end;
   background: var(--gradient-primary);
@@ -614,4 +635,45 @@ textarea:focus {
   font-size: 1.2em;
   vertical-align: middle;
   margin: 0 0.2em;
+}
+
+/* Chat message formatting */
+.chat-list {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.chat-list li {
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+
+.message-bot .chat-list li:before {
+  content: '•';
+  position: absolute;
+  left: -1rem;
+  color: var(--secondary-color);
+}
+
+.message-user .chat-list li:before {
+  content: '•';
+  position: absolute;
+  left: -1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Hinglish highlighting */
+.hinglish-highlight {
+  font-weight: 600;
+  color: var(--accent-color);
+  position: relative;
+  display: inline-block;
+}
+
+.message-user .hinglish-highlight {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.5);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }

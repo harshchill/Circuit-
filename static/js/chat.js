@@ -177,20 +177,98 @@ function renderChatMessages() {
             const messageElement = document.createElement('div');
             messageElement.className = `message message-${message.sender} animate-fade-in`;
             
-            let messageContent = `<div>${message.text}</div>`;
+            // Create message content div
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            // Format text with proper line breaks and emoji support
+            const formattedText = formatChatText(message.text);
+            contentDiv.innerHTML = formattedText;
+            
+            // Append content to message element
+            messageElement.appendChild(contentDiv);
             
             // Add meme text if available
             if (message.memeText) {
-                messageContent += `<div class="meme-text">${message.memeText}</div>`;
+                const memeDiv = document.createElement('div');
+                memeDiv.className = 'meme-text';
+                memeDiv.textContent = message.memeText;
+                messageElement.appendChild(memeDiv);
             }
             
             // Add timestamp
-            messageContent += `<div class="message-time">${message.timestamp}</div>`;
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'message-time';
+            timeDiv.textContent = message.timestamp;
+            messageElement.appendChild(timeDiv);
             
-            messageElement.innerHTML = messageContent;
             messagesContainer.appendChild(messageElement);
         }
     });
+}
+
+// Function to properly format chat text with line breaks and emojis
+function formatChatText(text) {
+    if (!text) return '';
+    
+    // First process any bullet point lists
+    const lines = text.split('\n');
+    let inList = false;
+    let formatted = '';
+    
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        
+        // Check for bullet points (- * •)
+        if (line.trim().match(/^[-*•][ \t]+/)) {
+            // If this is the first bullet point, start a list
+            if (!inList) {
+                formatted += '<ul class="chat-list">';
+                inList = true;
+            }
+            
+            // Add the bullet point as a list item, removing the bullet character
+            const listContent = line.trim().replace(/^[-*•][ \t]+/, '');
+            formatted += `<li>${listContent}</li>`;
+        } else {
+            // If we were in a list and now we're not, close the list
+            if (inList) {
+                formatted += '</ul>';
+                inList = false;
+            }
+            
+            // Add the regular line
+            formatted += line + '\n';
+        }
+    }
+    
+    // Close any open list at the end
+    if (inList) {
+        formatted += '</ul>';
+    }
+    
+    // Replace line breaks with <br> tags (but not inside lists)
+    formatted = formatted.replace(/\n/g, '<br>');
+    
+    // Replace markdown-style bold with HTML bold
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    
+    // Replace markdown-style italic with HTML italic
+    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    
+    // Add support for Hinglish words/phrases by highlighting them
+    const hinglishPatterns = [
+        /\b(yaar|bhai|matlab|samjhe|haina|ekdum|scene|vibe)\b/gi,
+        /\b(samajh gaye|bilkul|mast|solid hai|full faadu)\b/gi
+    ];
+    
+    hinglishPatterns.forEach(pattern => {
+        formatted = formatted.replace(pattern, match => {
+            return `<span class="hinglish-highlight">${match}</span>`;
+        });
+    });
+    
+    return formatted;
 }
 
 function scrollChatToBottom() {

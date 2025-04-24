@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Pal - Your AI Study Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">Exam Pal</div>
+            <div class="tagline">Your AI-powered study buddy for exam success</div>
+        </header>
+        
+        <main class="main">
+            <!-- File Upload Section -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h2>Upload Study Materials</h2>
+                    </div>
+                    <p>Upload your lecture notes, slides, or images of handwritten notes</p>
+                </div>
+                
+                <div class="card-content">
+                    <div id="upload-area" class="upload-area">
+                        <i class="fas fa-file-upload upload-icon"></i>
+                        <p>Drag and drop files here or click to browse</p>
+                        <p class="small text-muted">Supported formats: PDF, JPG, PNG</p>
+                        <input type="file" id="file-input" class="file-input" multiple accept=".pdf,.jpg,.jpeg,.png">
+                    </div>
+                    
+                    <div id="file-preview" class="file-preview">
+                        <div class="empty-state">No files uploaded yet</div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Study Plan Section -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h2>Generate Study Plan</h2>
+                    </div>
+                    <p>Let AI create a personalized study plan based on your materials</p>
+                </div>
+                
+                <div class="card-content">
+                    <form id="study-plan-form">
+                        <div class="form-group">
+                            <label for="study-goal">What's your study goal?</label>
+                            <select id="study-goal" required>
+                                <option value="">Select your goal</option>
+                                <option value="pass">Just pass the exam</option>
+                                <option value="good">Get a good grade</option>
+                                <option value="ace">Ace the exam</option>
+                                <option value="master">Master the material</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="deadline-date">Exam Date</label>
+                            <input type="date" id="deadline-date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="deadline-time">Exam Time</label>
+                            <input type="time" id="deadline-time" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-magic"></i> Generate Study Plan
+                        </button>
+                    </form>
+                    
+                    <div id="study-plan-loading" class="loading hidden">
+                        <div class="loading-spinner"></div>
+                        <p>Crafting your personalized study plan...</p>
+                    </div>
+                    
+                    <div id="study-plan-results" class="study-plan hidden">
+                        <!-- Study plan will be inserted here by JavaScript -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Chat Section -->
+            <section class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-comment-dots"></i>
+                        <h2>Chat with Exam Pal</h2>
+                    </div>
+                    <p>Ask questions about your materials or get help with specific topics</p>
+                </div>
+                
+                <div class="card-content">
+                    <div class="chat-container">
+                        <div class="chat-header">
+                            <div class="chat-avatar">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div>
+                                <h3>Exam Pal</h3>
+                                <p>Your Gen Z Study Assistant</p>
+                            </div>
+                        </div>
+                        
+                        <div id="chat-messages" class="chat-messages">
+                            <!-- Messages will be inserted here by JavaScript -->
+                        </div>
+                        
+                        <div class="chat-footer">
+                            <form id="chat-form" class="chat-form">
+                                <input
+                                    type="text"
+                                    id="chat-input"
+                                    class="chat-input"
+                                    placeholder="Upload files first, then chat with me..."
+                                    disabled
+                                >
+                                <button type="submit" class="chat-submit">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="footer">
+            <div class="text-center">
+                <p>&copy; 2023 Exam Pal - Ace your exams with AI</p>
+                <div class="footer-links">
+                    <a href="#" data-tooltip="About Exam Pal">About</a>
+                    <a href="#" data-tooltip="How it works">How it works</a>
+                    <a href="#" data-tooltip="Privacy policy">Privacy</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/file-uploader.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/study-plan.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

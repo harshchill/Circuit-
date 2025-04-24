@@ -109,6 +109,9 @@ def generate_study_plan(materials: List[Dict[str, Any]], goal: str, deadline: st
     3. Learning strategies appropriate for the material
     4. Recommended practice exercises or self-assessment methods
     
+    IMPORTANT: Identify units, chapters, or major topics in the materials and organize the study plan 
+    to follow these units in a logical progression. Each milestone should focus on specific units or topics.
+    
     Your response should be in JSON format with the following structure:
     {
         "overview": "General overview and approach",
@@ -117,13 +120,14 @@ def generate_study_plan(materials: List[Dict[str, Any]], goal: str, deadline: st
                 "date": "YYYY-MM-DD",
                 "title": "Milestone title",
                 "description": "Description of this milestone",
+                "unit": "Unit or topic name this milestone covers",
                 "tasks": ["Task 1", "Task 2", ...]
             },
             ...
         ]
     }
     
-    Ensure the milestones are distributed evenly from now until the deadline.
+    Ensure the milestones are distributed evenly from now until the deadline, and organize them by units or topics when available.
     """
     
     user_prompt = f"""

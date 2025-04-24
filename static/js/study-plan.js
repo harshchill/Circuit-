@@ -145,9 +145,13 @@ function displayStudyPlan(plan) {
                 tasksHTML += '</ul>';
             }
             
+            // Check if there's a unit property in the milestone
+            const unitHTML = milestone.unit ? `<div class="milestone-unit"><span class="unit-label">Unit:</span> ${milestone.unit}</div>` : '';
+            
             milestoneElement.innerHTML = `
                 <div class="milestone-date">${formatDate(milestone.date)}</div>
                 <h4>${milestone.title}</h4>
+                ${unitHTML}
                 <p>${milestone.description || ''}</p>
                 ${tasksHTML}
             `;

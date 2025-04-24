@@ -1,17 +1,23 @@
 /* Global Variables */
 :root {
-  --primary-color: #7F5AF0;
-  --primary-light: #9773ff;
-  --secondary-color: #2CB67D;
+  --primary-color: #6c63ff;  /* Changed from 7F5AF0 to a brighter blue-purple */
+  --primary-light: #8f89ff;  /* Lighter shade */
+  --secondary-color: #4cd3a5; /* Brighter teal */
   --text-color: #16161a;
-  --background-color: #fffffe;
-  --card-background: #f8f8fc;
-  --accent-color: #FF8E3C;
+  --background-color: #f5f7ff; /* Light blue-ish background instead of white */
+  --card-background: #ffffff; /* Pure white cards for contrast */
+  --accent-color: #ff6b6b;    /* Changed from orange to coral red */
   --danger-color: #ef4565;
-  --border-radius: 12px;
-  --box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-  --hover-shadow: 0 8px 32px rgba(127, 90, 240, 0.16);
+  --border-radius: 16px;      /* Increased border radius */
+  --box-shadow: 0 10px 30px rgba(108, 99, 255, 0.1); /* Colored shadow */
+  --hover-shadow: 0 15px 40px rgba(108, 99, 255, 0.2);
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  
+  /* Gradient variations */
+  --gradient-primary: linear-gradient(135deg, #6c63ff 0%, #8f89ff 100%);
+  --gradient-secondary: linear-gradient(135deg, #4cd3a5 0%, #83ebc5 100%);
+  --gradient-accent: linear-gradient(135deg, #ff6b6b 0%, #ffaa8c 100%);
+  --gradient-background: linear-gradient(135deg, #f0f4ff 0%, #f9f0ff 100%);
 }
 
 /* Reset and Base Styles */
@@ -23,10 +29,11 @@
 
 body {
   font-family: var(--font-family);
-  background-color: var(--background-color);
+  background: var(--gradient-background);
   color: var(--text-color);
   line-height: 1.6;
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
 /* Typography */
@@ -236,25 +243,63 @@ textarea:focus {
 }
 
 .btn-primary {
-  background-color: var(--primary-color);
+  background: var(--gradient-primary);
   color: white;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.btn-primary:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-color);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-light);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(127, 90, 240, 0.3);
+  box-shadow: 0 8px 20px rgba(108, 99, 255, 0.3);
+}
+
+.btn-primary:hover:before {
+  opacity: 1;
 }
 
 .btn-secondary {
-  background-color: var(--secondary-color);
+  background: var(--gradient-secondary);
   color: white;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.btn-secondary:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--secondary-color);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .btn-secondary:hover {
-  background-color: #35d492;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(44, 182, 125, 0.3);
+  box-shadow: 0 8px 20px rgba(76, 211, 165, 0.3);
+}
+
+.btn-secondary:hover:before {
+  opacity: 1;
 }
 
 .btn-block {
@@ -291,8 +336,23 @@ textarea:focus {
   margin-bottom: 0.5rem;
 }
 
+.milestone-unit {
+  display: inline-block;
+  background: var(--gradient-secondary);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+}
+
+.unit-label {
+  font-weight: bold;
+}
+
 .tasks {
   list-style: none;
+  margin-top: 0.8rem;
 }
 
 .task {
@@ -318,12 +378,13 @@ textarea:focus {
 }
 
 .chat-header {
-  background-color: var(--primary-color);
+  background: var(--gradient-primary);
   color: white;
   padding: 1rem;
   display: flex;
   align-items: center;
   gap: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .chat-avatar {
@@ -356,7 +417,7 @@ textarea:focus {
 
 .message-user {
   align-self: flex-end;
-  background-color: var(--primary-color);
+  background: var(--gradient-primary);
   color: white;
   border-bottom-right-radius: 0;
 }
@@ -366,6 +427,7 @@ textarea:focus {
   background-color: white;
   border: 1px solid #eee;
   border-bottom-left-radius: 0;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
 }
 
 .message-time {
@@ -395,7 +457,7 @@ textarea:focus {
 }
 
 .chat-submit {
-  background-color: var(--primary-color);
+  background: var(--gradient-primary);
   color: white;
   border: none;
   border-radius: 50%;
@@ -405,11 +467,13 @@ textarea:focus {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 8px rgba(108, 99, 255, 0.3);
 }
 
 .chat-submit:hover {
-  background-color: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4);
 }
 
 /* Loading Animation */

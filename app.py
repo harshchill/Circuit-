@@ -2,19 +2,26 @@ import os
 import logging
 from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 
+# Import config
+from config import SECRET_KEY, MAX_CONTENT_LENGTH, UPLOAD_FOLDER, ALLOWED_EXTENSIONS
+
 # Create Flask application
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "exam-pal-secret-key")
+app.secret_key = SECRET_KEY
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
-# Configure maximum file size for uploads (16MB)
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
-app.config['UPLOAD_FOLDER'] = 'uploads'
-app.config['ALLOWED_EXTENSIONS'] = {'pdf', 'png', 'jpg', 'jpeg'}
+# Configure application
+app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['ALLOWED_EXTENSIONS'] = ALLOWED_EXTENSIONS
 
 # Create uploads folder if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)

@@ -19,12 +19,12 @@ except ImportError:
     TESSERACT_AVAILABLE = False
     logging.warning("pytesseract not installed. OCR functionality will be limited.")
 
-from app import app
+from config import ALLOWED_EXTENSIONS, UPLOAD_FOLDER
 
 def allowed_file(filename: str) -> bool:
     """Check if a file has an allowed extension"""
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def save_uploaded_file(file, upload_dir: str = None) -> Tuple[bool, str, Optional[str]]:
     """
@@ -38,7 +38,7 @@ def save_uploaded_file(file, upload_dir: str = None) -> Tuple[bool, str, Optiona
         Tuple of (success: bool, message: str, saved_path: Optional[str])
     """
     if upload_dir is None:
-        upload_dir = app.config['UPLOAD_FOLDER']
+        upload_dir = UPLOAD_FOLDER
     
     if not file:
         return False, "No file provided", None
@@ -47,7 +47,7 @@ def save_uploaded_file(file, upload_dir: str = None) -> Tuple[bool, str, Optiona
         return False, "No file selected", None
     
     if not allowed_file(file.filename):
-        return False, f"File type not allowed. Supported types: {', '.join(app.config['ALLOWED_EXTENSIONS'])}", None
+        return False, f"File type not allowed. Supported types: {', '.join(ALLOWED_EXTENSIONS)}", None
     
     try:
         # Secure the filename to prevent path traversal attacks
@@ -157,7 +157,7 @@ def get_all_uploaded_files(user_id: str = "default") -> List[Dict]:
     Returns:
         List of dictionaries with file information
     """
-    upload_dir = app.config['UPLOAD_FOLDER']
+    upload_dir = UPLOAD_FOLDER
     files = []
     
     try:

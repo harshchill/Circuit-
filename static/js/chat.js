@@ -18,7 +18,7 @@ function initializeChat() {
     
     // Add chat welcome message
     if (chatMessages.length === 0) {
-        addBotMessage("Hey there! 👋 I'm your Gen Z study buddy. Upload some study materials and I'll help you crush that exam! What can I help you with today?", "Welcome");
+        addBotMessage("Kya scene hai bro! 👋 Main hun aapka study buddy yaar. Kuch notes upload karo aur main tumhe exam crack karne mein help karunga! Bolo kya chahiye aaj? 🔥", "Welcome");
     }
     
     // Handle form submission
@@ -63,7 +63,7 @@ function enableChat() {
     activeSession = true;
     
     // Add a notification message
-    addBotMessage("Sweet! I've got your study materials now. Ask me anything about them or how to prepare for your exam! 🔥", "Info");
+    addBotMessage("Mast! Tumhare saare notes mere paas aa gaye hain ab. Kuch bhi poocho inke baare mein ya exam ki taiyari ke liye tips chahiye to batao! 🔥", "Info");
 }
 
 function addUserMessage(message) {
@@ -123,13 +123,13 @@ function getBotResponse(message) {
         if (data.response) {
             addBotMessage(data.response);
         } else {
-            addBotMessage("Oops! Something went wrong with my brain. Try asking something else!");
+            addBotMessage("Arrey bhai! Mere dimaag mein kuch gadbad ho gayi. Kuch aur poocho na! 😅");
         }
     })
     .catch(error => {
         console.error('Error:', error);
         hideLoadingIndicator(loadingId);
-        addBotMessage("Yikes! I'm having technical difficulties. Give me a sec and try again! 🙈");
+        addBotMessage("Oho! Technical lafda ho gaya hai! Ek second ruko aur dobara try karo yaar! 🙈");
     });
 }
 
@@ -202,21 +202,29 @@ function scrollChatToBottom() {
 
 function getRandomMeme() {
     const memes = [
-        "NO CAP! 💯",
-        "That's FIRE! 🔥",
+        "Ekdum Sahi Hai! 💯",
+        "Full Faadu! 🔥",
         "IYKYK...",
-        "Living rent-free in my head",
-        "This is such a mood",
-        "Based! 👑",
-        "It's giving... knowledge",
-        "Straight facts, no printer",
-        "CEO of studying 📚",
+        "Dimaag mein rent-free chal raha hai",
+        "Bilkul mood hai yeh",
+        "Solid hai! 👑",
+        "Ye hai... knowledge ki baarish",
+        "Seedhi baat, no bakwaas",
+        "Padhai ka CEO 📚",
         "Main character energy",
-        "I'm deceased 💀",
-        "Absolutely slaying this",
+        "Mai toh dead ho gaya 💀",
+        "Full-on slay kar raha hai",
         "*chef's kiss*",
-        "Vibing with this 🤌",
-        "We stan education 👏"
+        "Iss vibe se connect ho raha hoon 🤌",
+        "Education ki jai ho 👏",
+        "Dil se OP! ❤️",
+        "Ye toh mast hai boss! 👌",
+        "Samajh gaye na? 😏",
+        "Tension not, apun hai na!",
+        "Kya baat, kya baat! 🙌",
+        "Filmy ho gaya bhai! 🎬",
+        "Dimaag ke taale khul gaye 🔓",
+        "Dekh ke maja aa gaya 🤩"
     ];
     
     return memes[Math.floor(Math.random() * memes.length)];

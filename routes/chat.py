@@ -60,7 +60,7 @@ def chat_message():
     uploaded_files = get_all_uploaded_files()
     
     if not uploaded_files:
-        ai_response = "I don't see any study materials uploaded yet. Please upload your notes, textbooks, or any resources you'd like me to help you with!"
+        ai_response = "Arrey yaar! Mujhe koi study materials nahi mil rahe abhi tak. Apne notes, books, ya koi bhi resources upload karo jisme main tumhari help kar sakun! PDF ya images dono chalenge! 📚🔍"
     else:
         # Process each file to get content if needed
         materials = []

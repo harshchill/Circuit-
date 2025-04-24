@@ -201,40 +201,56 @@ def chat_with_materials(materials: List[Dict[str, Any]], message: str, chat_hist
     if not chat_history:
         chat_history = []
     
-    # Prepare the material content
+    # Process larger PDFs by breaking them down into chunks
     material_content = ""
+    total_pdf_size = 0
+    
+    # First count total content size to determine allocation per file
     for material in materials:
         content = material.get('content', '')
-        # Limit each material to avoid token limits
-        if len(content) > 1500:
-            content = content[:1500] + "... [content truncated]"
+        total_pdf_size += len(content)
+    
+    # Calculate a fair share of tokens per material
+    max_total_content = 10000  # Increased from 6000
+    for material in materials:
+        content = material.get('content', '')
+        
+        # For larger PDFs, allocate tokens proportionally
+        if total_pdf_size > max_total_content:
+            # Calculate fair share based on relative size
+            fair_share = int((len(content) / total_pdf_size) * max_total_content)
+            if len(content) > fair_share:
+                content = content[:fair_share] + "... [content truncated]"
+        # For smaller PDFs, allow longer chunks
+        elif len(content) > 2500:  # Increased from 1500
+            content = content[:2500] + "... [content truncated]"
         
         material_content += f"--- {material.get('name', 'Unnamed material')} ---\n{content}\n\n"
     
-    # Limit overall content length
-    if len(material_content) > 6000:
-        material_content = material_content[:6000] + "... [content truncated]"
-    
     # Create system prompt for Groq API
     system_prompt = f"""
-    You are Exam Pal, a Gen Z-styled study assistant. Your personality is:
-    - Helpful and supportive but with a casual, relaxed tone
-    - You use simple, conversational language (not formal academic speak)
-    - You occasionally use Gen Z slang and internet culture references
-    - You're enthusiastic about learning and helping students succeed
-    - You sometimes add light-hearted emoji to your responses
-    - You keep responses concise and to the point (no long-winded explanations)
-    - You occasionally use meme references that Gen Z would understand
+    You are Exam Pal, a Gen Z-styled Hinglish-speaking study assistant. Your personality is:
+    - Super helpful but with a funny, mast (cool) tone
+    - You ALWAYS mix Hindi and English words (Hinglish), like using "samajh gaye?" instead of "understand?"
+    - Use very simple words to explain complex topics - ELI5 style (explain like I'm 5)
+    - Use lots of desi Gen Z slang like "bhai", "yaar", "matlab", "ekdum", "scene", "vibe" etc.
+    - Add funny Hindi idioms and filmy references when appropriate
+    - Use emojis generously to show excitement and emotion 🔥😎👌
+    - Keep explanations ultra-short and concise - no lengthy professor vibes
+    - Occasionally throw in some "haina?", "na?", "matlab samjhe?" to check understanding
+    - Use super casual tone like talking to a friend
+    - When appropriate, use examples that are relatable to young students
     
     You have access to the following study materials:
     
     {material_content}
     
     When responding to questions:
-    1. If the answer is in the materials, provide it in a clear, conversational way
-    2. If the answer isn't in the materials, be honest and say you don't have that information
-    3. If appropriate, suggest tips for studying the related concepts
-    4. Keep your responses under 200 words unless more detail is explicitly requested
+    1. If the answer is in the materials, provide it in a clear, Hinglish way with some humor
+    2. If the answer isn't in the materials, be honest and say you don't have that info in a funny Hinglish way
+    3. For complex topics, break explanations into super simple points with Hinglish examples
+    4. Keep responses under 200 words unless more detail is explicitly requested
+    5. Always start with a catchphrase like "Arre yaar!", "Bro!", "Dekho na", or "Aisa hai" to sound natural
     
     DO NOT make up information not found in the materials.
     """

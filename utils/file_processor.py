@@ -12,12 +12,7 @@ from typing import Dict, List, Tuple, Optional
 import PyPDF2
 from werkzeug.utils import secure_filename
 from PIL import Image
-try:
-    import pytesseract
-    TESSERACT_AVAILABLE = True
-except ImportError:
-    TESSERACT_AVAILABLE = False
-    logging.warning("pytesseract not installed. OCR functionality will be limited.")
+import requests
 
 from config import ALLOWED_EXTENSIONS, UPLOAD_FOLDER
 
@@ -93,25 +88,75 @@ def extract_text_from_pdf(pdf_path: str) -> str:
     
     return text
 
+def upload_to_groq_vision(file_path: str) -> str:
+    """
+    Upload an image file to Groq Vision for processing.
+
+    Args:
+        file_path: Path to the image file.
+
+    Returns:
+        The file ID returned by Groq Vision.
+    """
+    GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+    GROQ_VISION_URL = "https://api.groq.com/vision/v1/upload"
+
+    if not GROQ_API_KEY:
+        raise ValueError("Groq API key is not set in the environment variables.")
+
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}"
+    }
+
+    with open(file_path, "rb") as file:
+        files = {"file": file}
+        response = requests.post(GROQ_VISION_URL, headers=headers, files=files)
+
+    if response.status_code != 200:
+        raise Exception(f"Failed to upload file to Groq Vision: {response.text}")
+
+    return response.json().get("id")
+
+def extract_text_from_image_with_groq(file_path: str) -> str:
+    """
+    Extract text from an image using Groq Vision.
+
+    Args:
+        file_path: Path to the image file.
+
+    Returns:
+        Extracted text as a string.
+    """
+    file_id = upload_to_groq_vision(file_path)
+    GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+    GROQ_VISION_PROCESS_URL = f"https://api.groq.com/vision/v1/process/{file_id}"
+
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}"
+    }
+
+    response = requests.get(GROQ_VISION_PROCESS_URL, headers=headers)
+
+    if response.status_code != 200:
+        raise Exception(f"Failed to process file with Groq Vision: {response.text}")
+
+    return response.json().get("text", "")
+
+# Update the existing extract_text_from_image function to use Groq Vision
 def extract_text_from_image(image_path: str) -> str:
     """
-    Extract text from an image using OCR
-    
+    Extract text from an image using Groq Vision.
+
     Args:
-        image_path: Path to the image file
-        
+        image_path: Path to the image file.
+
     Returns:
-        Extracted text as a string
+        Extracted text as a string.
     """
-    if not TESSERACT_AVAILABLE:
-        return "[OCR not available - pytesseract not installed]"
-    
     try:
-        img = Image.open(image_path)
-        text = pytesseract.image_to_string(img)
-        return text
+        return extract_text_from_image_with_groq(image_path)
     except Exception as e:
-        logging.error(f"Error extracting text from image: {str(e)}")
+        logging.error(f"Error extracting text from image using Groq Vision: {str(e)}")
         return f"[Error extracting text: {str(e)}]"
 
 def process_file(file_path: str) -> Dict:
